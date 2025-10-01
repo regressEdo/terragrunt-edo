@@ -1,0 +1,6 @@
+*.pkg.tar.*
+src/
+pkg/
+*.log
+*.zip
+terragrunt/
