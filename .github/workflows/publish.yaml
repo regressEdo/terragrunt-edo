@@ -3,6 +3,9 @@ name: Publish to AUR
 on:
   push:
     branches: [ main ]
+    paths:
+      - "PKGBUILD"
+      - ".SRCINFO"
   workflow_dispatch: {}
 
 jobs:
