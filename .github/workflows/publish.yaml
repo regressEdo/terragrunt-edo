@@ -12,44 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Install makepkg deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fakeroot binutils pacman curl
-
-      - name: Generate .SRCINFO
-        run: |
-          docker run --rm -v "$PWD":/pkg archlinux:base-devel bash -lc '
-            useradd -m builder
-            chown -R builder:builder /pkg
-            su builder -c "cd /pkg && makepkg --printsrcinfo > .SRCINFO"
-          '
-
-      - name: (Optional) Test build
-        run: |
-          docker run --rm -v "$PWD":/pkg archlinux:base-devel bash -lc '
-            set -euo pipefail
-
-            # Update package databases first
-            pacman -Syu --noconfirm --noprogressbar
-
-            # Create a non-root builder user
-            useradd -m builder
-            chown -R builder:builder /pkg
-
-            # Install sudo so we can delegate pacman calls
-            pacman -S --noconfirm --needed sudo
-
-            # Allow builder to run pacman without a password
-            echo "builder ALL=(ALL) NOPASSWD: /usr/bin/pacman" >> /etc/sudoers
-
-            # Now drop into builder and build the package
-            su builder -c "
-              cd /pkg &&
-              makepkg -sir --noconfirm --noprogressbar
-            "
-          '
-
       - name: Publish to AUR
         uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
         with:
