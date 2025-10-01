@@ -9,6 +9,26 @@
       "datasourceTemplate": "github-releases",
       "versioningTemplate": "semver",
       "extractVersionTemplate": "^v?(?<version>\\d+\\.\\d+\\.\\d+)$"
+    },
+    {
+      "fileMatch": ["^\\.SRCINFO$"],
+      "matchStrings": [
+        "pkgver\\s*=\\s*(?<currentValue>\\d+\\.\\d+\\.\\d+)\\n"
+      ],
+      "depNameTemplate": "gruntwork-io/terragrunt",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver",
+      "extractVersionTemplate": "^v?(?<version>\\d+\\.\\d+\\.\\d+)$"
+    }
+  ],
+
+  "packageRules": [
+    {
+      "matchManagers": ["regex"],
+      "matchDepNames": ["gruntwork-io/terragrunt"],
+      "groupName": "terragrunt version bump",
+      "commitMessageTopic": "terragrunt",
+      "commitMessageExtra": "to {{newVersion}}"
     }
   ]
 }
