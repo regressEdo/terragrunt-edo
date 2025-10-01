@@ -1,0 +1,14 @@
+{
+  "regexManagers": [
+    {
+      "fileMatch": ["^PKGBUILD$"],
+      "matchStrings": [
+        "pkgver=(?<currentValue>.*)\\n"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "gruntwork-io/terragrunt",
+      "versioningTemplate": "loose"
+    }
+  ],
+  "prHourlyLimit": 2
+}

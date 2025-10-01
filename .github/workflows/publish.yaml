@@ -1,0 +1,52 @@
+name: Publish to AUR
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "PKGBUILD"
+      - ".github/workflows/publish.yml"
+      - "*.patch"
+  workflow_dispatch: {}
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install makepkg deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot binutils pacman curl
+
+      - name: Generate .SRCINFO
+        run: |
+          # Install makepkg tooling from Arch container or use pkgbuild-introspection
+          docker run --rm -v "$PWD":/pkg archlinux:base-devel bash -lc "
+            pacman -Sy --noconfirm pkgbuild-introspection && \
+            cd /pkg && makepkg --printsrcinfo > .SRCINFO
+          "
+
+      - name: (Optional) Test build
+        run: |
+          docker run --rm -v "$PWD":/pkg archlinux:base-devel bash -lc "
+            useradd -m builder && echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
+            su builder -c 'cd /pkg && makepkg -sir --noconfirm'
+          "
+
+      - name: Publish to AUR
+        uses: KSXGitHub/github-actions-deploy-aur@v4
+        with:
+          pkgname: terragrunt-edo
+          pkgbuild: ./PKGBUILD
+          assets: |
+            .SRCINFO
+            *.patch
+          updpkgsums: true
+          test: false
+        env:
+          AUR_USERNAME: ${{ secrets.AUR_USERNAME }}
+          AUR_EMAIL:    ${{ secrets.AUR_EMAIL }}
+          AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
