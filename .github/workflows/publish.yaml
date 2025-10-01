@@ -15,7 +15,9 @@ jobs:
       - name: Publish to AUR
         uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
         with:
-          commit_username : regressEdo
+          commit_username: ${{ vars.AUR_USERNAME }}
+          commit_email:    ${{ vars.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
           pkgname: terragrunt-edo
           pkgbuild: ./PKGBUILD
           assets: |
