@@ -21,8 +21,7 @@ jobs:
             .SRCINFO
             *.patch
           updpkgsums: true
-          test: false
         env:
-          commit_username: ${{ env.commit_username }}
-          commit_email:    ${{ env.commit_email }}
+          commit_username: ${{ vars.AUR_USERNAME }}
+          commit_email:    ${{ vars.AUR_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
