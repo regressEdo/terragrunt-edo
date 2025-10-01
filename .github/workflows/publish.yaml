@@ -22,7 +22,6 @@ jobs:
           pkgbuild: ./PKGBUILD
           assets: |
             .SRCINFO
-            *.patch
           updpkgsums: true
         env:
           commit_username: ${{ vars.AUR_USERNAME }}
