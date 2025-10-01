@@ -1,7 +1,7 @@
 name: Publish to AUR
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
   workflow_dispatch: {}
 
@@ -49,18 +49,3 @@ jobs:
               makepkg -sir --noconfirm --noprogressbar
             "
           '
-
-      - name: Publish to AUR
-        uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
-        with:
-          pkgname: terragrunt-edo
-          pkgbuild: ./PKGBUILD
-          assets: |
-            .SRCINFO
-            *.patch
-          updpkgsums: true
-          test: false
-        env:
-          AUR_USERNAME: ${{ secrets.AUR_USERNAME }}
-          AUR_EMAIL:    ${{ secrets.AUR_EMAIL }}
-          AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}

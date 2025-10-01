@@ -3,7 +3,7 @@
     {
       "fileMatch": ["^PKGBUILD$"],
       "matchStrings": [
-        "pkgver=(?<currentValue>.*)\\n"
+        "pkgver=(?<currentValue>\\d+\\.\\d+\\.\\d+)(?:.*)\\n"
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "gruntwork-io/terragrunt",
